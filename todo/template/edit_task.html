@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Task</title>
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <link rel="stylesheet" href="{% static 'form.css' %}">
+</head>
+<body>
+    <nav>
+        <span class="logo">My To-Do List</span>
+        <a class="btn add" href="{% url 'home' %}">All Tasks</a>
+    </nav>
+
+    <main>
+        <h1>Edit Task</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.title.label_tag }}
+            {{ form.title.errors }}
+            {{ form.title }}
+
+            {{ form.description.label_tag }}
+            {{ form.description }}
+
+            <label class="check">{{ form.done }} Done</label>
+
+            <div class="buttons">
+                <button class="btn add" type="submit">Save</button>
+                <a class="btn cancel" href="{% url 'home' %}">Cancel</a>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

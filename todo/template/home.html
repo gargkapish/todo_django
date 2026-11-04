@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My To-Do List</title>
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+</head>
+<body>
+    <nav>
+        <span class="logo">My To-Do List</span>
+        <a class="btn add" href="{% url 'add_task' %}">Add Task</a>
+    </nav>
+
+    <main>
+        <h1>All Tasks</h1>
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Done</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+                {% for task in tasks %}
+                <tr class="{% if task.done %}completed{% else %}pending{% endif %}">
+                    <td class="text">{{ task.title }}</td>
+                    <td class="text">{{ task.description }}</td>
+                    <td>
+                        <form method="post" action="{% url 'toggle_task' task.id %}">
+                            {% csrf_token %}
+                            <input type="checkbox" aria-label="Done" onchange="this.form.submit()" {% if task.done %}checked{% endif %}>
+                        </form>
+                    </td>
+                    <td>{{ task.created|date:"Y-m-d H:i" }}</td>
+                    <td class="actions">
+                        <a class="btn edit" href="{% url 'edit_task' task.id %}">Edit</a>
+                        <form method="post" action="{% url 'delete_task' task.id %}">
+                            {% csrf_token %}
+                            <button class="btn delete" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="empty">No tasks yet.</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </main>
+</body>
+</html>
